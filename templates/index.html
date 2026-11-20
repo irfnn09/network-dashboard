@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetWatch — Network Monitor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <div class="logo">⬡ NetWatch</div>
+            <span class="tagline">Network Monitor Dashboard</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="summary-bar">
+            <div class="summary-card">
+                <span class="summary-num">{{ devices|length }}</span>
+                <span class="summary-label">Total Devices</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-num green">{{ devices|selectattr('status','equalto','Online')|list|length }}</span>
+                <span class="summary-label">Online</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-num red">{{ devices|selectattr('status','equalto','Offline')|list|length }}</span>
+                <span class="summary-label">Offline</span>
+            </div>
+        </div>
+
+        <div class="device-list">
+            {% for device in devices %}
+            <div class="device-card">
+                <div class="device-info">
+                    <span class="device-name">{{ device.name }}</span>
+                    <span class="device-host">{{ device.host }}</span>
+                </div>
+                <span class="badge {{ 'badge-online' if device.status == 'Online' else 'badge-offline' }}">
+                    {{ device.status }}
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <p>NetWatch © 2024 — Built with Python & Flask</p>
+    </footer>
+
+</body>
+</html>
